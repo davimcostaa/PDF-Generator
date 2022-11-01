@@ -8,7 +8,7 @@ lime = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/lime.xlsx")
 terrasIndigenas = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/terrasindigenas.xlsx")
 etnias = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/etnias.xlsx")
 
-id_resposta = 166
+id_resposta = 357
 
 lime.set_index('ID da resposta',inplace=True)
 terrasIndigenas.set_index('ID',inplace=True)
@@ -28,6 +28,7 @@ btL = ParagraphStyle('BodyTextTTLower',parent=bt, textTransform='uppercase')
 titulo = lime['Nome do Projeto'][id_resposta]
 
 c = canvas.Canvas('projetos_etno.pdf')
+
 # draw = Drawing(500, 200)
 c.saveState()
 c.setLineWidth(1.5)
@@ -38,6 +39,7 @@ c.drawCentredString(300,770, lime['Coordenação Regional ou Frente de Proteçã
 c.drawImage('logo-png.png', 500, 770, 50, 70)
 # c.saveState()
 c.setFont('Times-Bold', 15) 
+
 if len(titulo) < 70:
     paragrafo = Paragraph(lime['Nome do Projeto'][id_resposta], style=my_Style)
     paragrafo.wrapOn(c, 530, 400)
@@ -87,12 +89,11 @@ for indice, linha in terrasIndigenas.iterrows():
     if indice == id_resposta:
         terras.append(linha['Terras Indígenas'])
 
-print(terras)
+
     
 terras_indigenas = str(terras).strip('[]') 
-print(terras_indigenas)
+
 terras = Paragraph(terras_indigenas, style= btL)
-print(terras)
 terras.wrapOn(c, 420, 20)
 terras.drawOn(c, 162, 227)
 
@@ -104,19 +105,31 @@ for indice, linha in etnias.iterrows():
  
 etnias_id = str(valores).strip('[]') 
 etn = Paragraph(etnias_id, style= btL)
-print(etn)
 etn.wrapOn(c, 420, 20)
 etn.drawOn(c, 162, 180)
   
-# c.drawString(30,640,'Coordenação Regional:')
-# c.drawString(160,643, str (col3))
-# c.drawString(30,615,'Data e hora:')
-# c.drawString(160,618, str (col4))
-
-
-# # c.drawString(30,600, str (col1))
-# # c.drawString(100,600, str (col2))
-# # c.drawString(350,600, str (col3))              
            
+
+for i in range(1):     
+    c.showPage()      
+           
+    
+c.saveState()
+c.setLineWidth(1.5)
+c.rect(10,690,575,110, stroke=1, fill=0)
+c.restoreState()
+c.setFont('Times-Bold', 16)
+c.drawCentredString(300,770, lime['Coordenação Regional ou Frente de Proteção Etnoambiental'][id_resposta])
+c.drawImage('logo-png.png', 500, 770, 50, 70)    
+
+if len(titulo) < 70:
+    paragrafo = Paragraph(lime['Nome do Projeto'][id_resposta], style=my_Style)
+    paragrafo.wrapOn(c, 530, 400)
+    paragrafo.drawOn(c, 30, 730)
+else:    
+    paragrafo = Paragraph(lime['Nome do Projeto'][id_resposta], style=my_Style)
+    paragrafo.wrapOn(c, 530, 400)
+    paragrafo.drawOn(c, 30, 700)
+
 c.save()
 
