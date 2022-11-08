@@ -3,12 +3,14 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Frame
+from reportlab.lib import colors
 
 lime = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/lime.xlsx") 
 terrasIndigenas = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/terrasindigenas.xlsx")
 etnias = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/etnias.xlsx")
 
-id_resposta = 357
+id_resposta = 397
 
 lime.set_index('ID da resposta',inplace=True)
 terrasIndigenas.set_index('ID',inplace=True)
@@ -90,8 +92,7 @@ for indice, linha in terrasIndigenas.iterrows():
         terras.append(linha['Terras Indígenas'])
 
 
-    
-terras_indigenas = str(terras).strip('[]') 
+terras_indigenas = str(terras).strip('[]')  
 
 terras = Paragraph(terras_indigenas, style= btL)
 terras.wrapOn(c, 420, 20)
@@ -107,8 +108,7 @@ etnias_id = str(valores).strip('[]')
 etn = Paragraph(etnias_id, style= btL)
 etn.wrapOn(c, 420, 20)
 etn.drawOn(c, 162, 180)
-  
-           
+         
 
 for i in range(1):     
     c.showPage()      
@@ -131,5 +131,58 @@ else:
     paragrafo.wrapOn(c, 530, 400)
     paragrafo.drawOn(c, 30, 700)
 
+
+data = [
+    ['SubElemento de despesa', 'Valor', 'Memória de Cálculo'],
+    [lime['1º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 1º subelemento de despesa selecionado ']
+        [id_resposta], lime['1 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
+    [lime['2º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 2º subelemento de despesa selecionado ']
+        [id_resposta], lime['2 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
+    [lime['3º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 3º subelemento de despesa selecionado ']
+        [id_resposta], lime['3 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
+    [lime['4º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 4º subelemento de despesa selecionado ']
+        [id_resposta], lime['4 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
+    [lime['5º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 5º subelemento de despesa selecionado ']
+        [id_resposta], lime['5 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
+    [lime['6º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 6º subelemento de despesa selecionado ']
+        [id_resposta], lime['6 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
+    [lime['7º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 7º subelemento de despesa selecionado ']
+        [id_resposta], lime['7 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
+    [lime['8º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 8º subelemento de despesa selecionado ']
+        [id_resposta], lime['8 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
+    [lime['9º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 9º subelemento de despesa selecionado ']
+        [id_resposta], lime['9 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]], 
+    [lime['10º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 10º subelemento de despesa selecionado ']
+        [id_resposta], lime['10 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
+]
+
+df = pd.DataFrame(
+    data, columns=['SubElemento de despesa', 'Valor', 'Memória de Cálculo'])
+
+
+data2 = df.dropna()
+data2.Valor = data2.Valor.astype(str)
+
+lista = data2.values.tolist()
+
+# Configure style and word wrap
+
+
+s = getSampleStyleSheet()
+s = s["BodyText"]
+s.wordWrap = 'CJK'
+
+data2 = [[Paragraph(cell, s) for cell in row] for row in lista]
+t=Table(data2)
+t.setStyle(TableStyle([("BOX", (0, 0), (-1, -1), 0.25, colors.black),
+                       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black)]))
+
+t.wrapOn(c, 530, 600)
+t.drawOn(c, 30, 100)
+
+
+c.showPage()    
+ 
 c.save()
+
 
