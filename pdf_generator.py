@@ -10,7 +10,7 @@ lime = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/lime.xlsx")
 terrasIndigenas = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/terrasindigenas.xlsx")
 etnias = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/etnias.xlsx")
 
-id_resposta = 397
+id_resposta = 58
 
 lime.set_index('ID da resposta',inplace=True)
 terrasIndigenas.set_index('ID',inplace=True)
@@ -109,79 +109,77 @@ etn = Paragraph(etnias_id, style= btL)
 etn.wrapOn(c, 420, 20)
 etn.drawOn(c, 162, 180)
          
+c.showPage() 
 
-for i in range(1):     
-    c.showPage()      
-           
+for i in range(2):      
+        
+    c.saveState()
+    c.setLineWidth(1.5)
+    c.rect(10,690,575,110, stroke=1, fill=0)
+    c.restoreState()
+    c.setFont('Times-Bold', 16)
+    c.drawCentredString(300,770, lime['Coordenação Regional ou Frente de Proteção Etnoambiental'][id_resposta])
+    c.drawImage('logo-png.png', 500, 770, 50, 70)    
     
-c.saveState()
-c.setLineWidth(1.5)
-c.rect(10,690,575,110, stroke=1, fill=0)
-c.restoreState()
-c.setFont('Times-Bold', 16)
-c.drawCentredString(300,770, lime['Coordenação Regional ou Frente de Proteção Etnoambiental'][id_resposta])
-c.drawImage('logo-png.png', 500, 770, 50, 70)    
+    if len(titulo) < 70:
+        paragrafo = Paragraph(lime['Nome do Projeto'][id_resposta], style=my_Style)
+        paragrafo.wrapOn(c, 530, 400)
+        paragrafo.drawOn(c, 30, 730)
+    else:    
+        paragrafo = Paragraph(lime['Nome do Projeto'][id_resposta], style=my_Style)
+        paragrafo.wrapOn(c, 530, 400)
+        paragrafo.drawOn(c, 30, 700)
+    
+    data = [
+        ['SUBELEMENTO DE DESPESA', 'VALOR'],
+        [lime['1º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 1º subelemento de despesa selecionado ']
+            [id_resposta]],
+        [lime['2º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 2º subelemento de despesa selecionado ']
+            [id_resposta]],
+        [lime['3º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 3º subelemento de despesa selecionado ']
+            [id_resposta]],
+        [lime['4º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 4º subelemento de despesa selecionado ']
+            [id_resposta]],
+        [lime['5º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 5º subelemento de despesa selecionado ']
+            [id_resposta]],
+        [lime['6º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 6º subelemento de despesa selecionado ']
+            [id_resposta]],
+        [lime['7º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 7º subelemento de despesa selecionado ']
+            [id_resposta]],
+        [lime['8º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 8º subelemento de despesa selecionado ']
+            [id_resposta]],
+        [lime['9º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 9º subelemento de despesa selecionado ']
+            [id_resposta]], 
+        [lime['10º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 10º subelemento de despesa selecionado ']
+            [id_resposta]],
+    ]
+    
+    df = pd.DataFrame(
+        data, columns=['SubElemento de despesa', 'Valor'])
+    
+    data2 = df.dropna()
+    data2.Valor = data2.Valor.astype(str)
+    
+    lista = data2.values.tolist()
+        
 
-if len(titulo) < 70:
-    paragrafo = Paragraph(lime['Nome do Projeto'][id_resposta], style=my_Style)
-    paragrafo.wrapOn(c, 530, 400)
-    paragrafo.drawOn(c, 30, 730)
-else:    
-    paragrafo = Paragraph(lime['Nome do Projeto'][id_resposta], style=my_Style)
-    paragrafo.wrapOn(c, 530, 400)
-    paragrafo.drawOn(c, 30, 700)
+    style = TableStyle([('ALIGN',(1,1),(-2,-2),'LEFT'),
+                       ('TEXTCOLOR',(0,0), (-1,-1),colors.red),
+                       ('VALIGN',(0,0),(0,-1),'TOP'),
+                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.blue),
+                       ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+                       ])
+    t=Table(lista)
+    t.setStyle(style)
+    
 
+    c.saveState()
+    c.setFont('Times-Bold', 16)
+    t.wrapOn(c, 600, 800)
+    t.drawOn(c, 100, 500)
+    c.restoreState()
 
-data = [
-    ['SubElemento de despesa', 'Valor', 'Memória de Cálculo'],
-    [lime['1º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 1º subelemento de despesa selecionado ']
-        [id_resposta], lime['1 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
-    [lime['2º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 2º subelemento de despesa selecionado ']
-        [id_resposta], lime['2 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
-    [lime['3º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 3º subelemento de despesa selecionado ']
-        [id_resposta], lime['3 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
-    [lime['4º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 4º subelemento de despesa selecionado ']
-        [id_resposta], lime['4 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
-    [lime['5º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 5º subelemento de despesa selecionado ']
-        [id_resposta], lime['5 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
-    [lime['6º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 6º subelemento de despesa selecionado ']
-        [id_resposta], lime['6 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
-    [lime['7º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 7º subelemento de despesa selecionado ']
-        [id_resposta], lime['7 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
-    [lime['8º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 8º subelemento de despesa selecionado ']
-        [id_resposta], lime['8 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
-    [lime['9º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 9º subelemento de despesa selecionado ']
-        [id_resposta], lime['9 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]], 
-    [lime['10º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 10º subelemento de despesa selecionado ']
-        [id_resposta], lime['10 Apresente a memória de cálculo referente ao subelemento acima'][id_resposta]],
-]
-
-df = pd.DataFrame(
-    data, columns=['SubElemento de despesa', 'Valor', 'Memória de Cálculo'])
-
-
-data2 = df.dropna()
-data2.Valor = data2.Valor.astype(str)
-
-lista = data2.values.tolist()
-
-# Configure style and word wrap
-
-
-s = getSampleStyleSheet()
-s = s["BodyText"]
-s.wordWrap = 'CJK'
-
-data2 = [[Paragraph(cell, s) for cell in row] for row in lista]
-t=Table(data2)
-t.setStyle(TableStyle([("BOX", (0, 0), (-1, -1), 0.25, colors.black),
-                       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black)]))
-
-t.wrapOn(c, 530, 600)
-t.drawOn(c, 30, 100)
-
-
-c.showPage()    
+    c.showPage()    
  
 c.save()
 
