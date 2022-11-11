@@ -10,7 +10,7 @@ lime = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/lime.xlsx")
 terrasIndigenas = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/terrasindigenas.xlsx")
 etnias = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/etnias.xlsx")
 
-id_resposta = 58
+id_resposta = 357
 
 lime.set_index('ID da resposta',inplace=True)
 terrasIndigenas.set_index('ID',inplace=True)
@@ -111,7 +111,7 @@ etn.drawOn(c, 162, 180)
          
 c.showPage() 
 
-for i in range(2):      
+for i in range(1):      
         
     c.saveState()
     c.setLineWidth(1.5)
@@ -131,7 +131,7 @@ for i in range(2):
         paragrafo.drawOn(c, 30, 700)
     
     data = [
-        ['SUBELEMENTO DE DESPESA', 'VALOR'],
+        # ['SUBELEMENTO DE DESPESA', 'VALOR'],
         [lime['1º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 1º subelemento de despesa selecionado ']
             [id_resposta]],
         [lime['2º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 2º subelemento de despesa selecionado ']
@@ -154,29 +154,50 @@ for i in range(2):
             [id_resposta]],
     ]
     
+    
     df = pd.DataFrame(
         data, columns=['SubElemento de despesa', 'Valor'])
     
-    data2 = df.dropna()
-    data2.Valor = data2.Valor.astype(str)
-    
-    lista = data2.values.tolist()
-        
+    df['Valor'] = df['Valor'].astype(float)
+    # df = df.drop(columns = ['Valor'])
+    df['Valor'] = df['Valor'].map("{:.2f}".format)
+    df['Valor'] = df['Valor'].map("R$ {}".format)
 
-    style = TableStyle([('ALIGN',(1,1),(-2,-2),'LEFT'),
-                       ('TEXTCOLOR',(0,0), (-1,-1),colors.red),
-                       ('VALIGN',(0,0),(0,-1),'TOP'),
-                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.blue),
-                       ('BOX', (0,0), (-1,-1), 0.25, colors.black),
-                       ])
-    t=Table(lista)
+
+   
+    data2 = df.dropna()
+
+
+    # print(data2)
+
+
+    lista = data2.values.tolist()
+            
+
+    style = TableStyle([('TEXTCOLOR',(0,0),(-1,-1),colors.black),
+                        ('VALIGN',(0,0),(-1,-1),'TOP'),
+                        ('LINEBELOW',(0,0),(-1,-1),1,colors.black),
+                        ('BOX',(0,0),(-1,-1),1,colors.black),
+                        ('BOX',(0,0),(0,-1),1,colors.black),
+                        # ('FONTNAME', (0,0), (-1,-1), 'Calibri'),
+                        ('FONTSIZE', (0,0), (-1,-1), 12),
+                        ('ALIGN', (0, 0), (-1, -1), 'CENTER')])    
+    style.add('BACKGROUND',(0,0),(1,0),colors.lightblue)
+    style.add('BACKGROUND',(0,1),(-1,-1),colors.white)
+    
+    t=Table(lista, rowHeights=(30))
     t.setStyle(style)
     
 
     c.saveState()
     c.setFont('Times-Bold', 16)
-    t.wrapOn(c, 600, 800)
-    t.drawOn(c, 100, 500)
+    if len(data2.index) >= 7:
+        t.wrapOn(c, 800, 800)
+        t.drawOn(c, 75, 300)
+    else: 
+        t.wrapOn(c, 800, 800)
+        t.drawOn(c, 75, 400)
+        
     c.restoreState()
 
     c.showPage()    
