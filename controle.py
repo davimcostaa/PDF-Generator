@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Nov 16 10:40:59 2022
-
 @author: davi.costa
 """
 from PyQt5 import uic, QtWidgets
@@ -17,14 +16,18 @@ from reportlab.platypus import Table, TableStyle, Paragraph
 from reportlab.lib import colors
 
 try:
-    lime = pd.read_excel("X:/CGETNO/CGETNO/Estágio/Davi/lime.xlsx") 
+    lime = pd.read_excel("X:/CGETNO/CGETNO/Estágio/Davi/BI/dragolatocoloni2.xlsx") 
     lime.set_index('ID da resposta',inplace=True)
 except FileNotFoundError:
-    lime = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/lime.xlsx") 
+    lime = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/BI/dragolatocoloni2.xlsx") 
     lime.set_index('ID da resposta',inplace=True)
-      
-terrasIndigenas = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/terrasindigenas.xlsx")
-etnias = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/etnias.xlsx")
+
+try:      
+    terrasIndigenas = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/terrasindigenas.xlsx")
+    etnias = pd.read_excel("Z:/CGETNO/CGETNO/Estágio/Davi/etnias.xlsx")
+except FileNotFoundError:
+    terrasIndigenas = pd.read_excel("X:/CGETNO/CGETNO/Estágio/Davi/terrasindigenas.xlsx")
+    etnias = pd.read_excel("X:/CGETNO/CGETNO/Estágio/Davi/etnias.xlsx")
 
 my_Style=ParagraphStyle('My Para style',
 fontName='Times-Bold',
@@ -43,7 +46,7 @@ def gerar_pdf():
         id_resposta = int(id)
 
         titulo = lime['Nome do Projeto'][id_resposta]
-        c = canvas.Canvas('projetos_etno.pdf')
+        c = canvas.Canvas(f'projetos_etno{id}.pdf')
 
         # draw = Drawing(500, 200)
         c.saveState()
