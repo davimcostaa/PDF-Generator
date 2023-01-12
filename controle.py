@@ -9,6 +9,19 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle, Paragraph
 from reportlab.lib import colors
+import gspread
+
+CODE = ''
+
+gc = gspread.service_account(filename='key.json')
+
+sh = gc.open_by_key(CODE)
+
+ws = sh.worksheet('Formulário de Projetos de Etnod')
+
+lime = pd.DataFrame(ws.get_all_records())
+
+lime.set_index('ID da resposta', inplace=True)
 
 import string
 
@@ -16,16 +29,11 @@ letras = list(string.ascii_lowercase)
 
 for i in letras:
     try:
-        lime = pd.read_excel(f"{i}:/CGETNO/CGETNO/Estágio/Davi/BI/dragolatocoloni2.xlsx") 
-        lime.set_index('ID da resposta',inplace=True)
-
         terrasIndigenas = pd.read_excel(f"{i}:/CGETNO/CGETNO/Estágio/Davi/terrasindigenas.xlsx")
         etnias = pd.read_excel(f"{i}:/CGETNO/CGETNO/Estágio/Davi/etnias.xlsx")
     except FileNotFoundError:
         pass
-    
-tnias = pd.read_excel("X:/CGETNO/CGETNO/Estágio/Davi/etnias.xlsx")
-
+   
 my_Style=ParagraphStyle('My Para style',
 fontName='Times-Bold',
 fontSize = 16,
@@ -144,37 +152,37 @@ def gerar_pdf():
                 paragrafo.wrapOn(c, 530, 400)
                 paragrafo.drawOn(c, 30, 700)
             
-            data = [
+             data = [
                 # ['SUBELEMENTO DE DESPESA', 'VALOR'],
-                [lime['1º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 1º subelemento de despesa selecionado ']
+                [lime['1º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 1º subelemento de despesa selecionado ']
                     [id_resposta]],
-                [lime['2º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 2º subelemento de despesa selecionado ']
+                [lime['2º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 2º subelemento de despesa selecionado ']
                     [id_resposta]],
-                [lime['3º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 3º subelemento de despesa selecionado ']
+                [lime['3º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 3º subelemento de despesa selecionado ']
                     [id_resposta]],
-                [lime['4º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 4º subelemento de despesa selecionado ']
+                [lime['4º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 4º subelemento de despesa selecionado ']
                     [id_resposta]],
-                [lime['5º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 5º subelemento de despesa selecionado ']
+                [lime['5º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 5º subelemento de despesa selecionado ']
                     [id_resposta]],
-                [lime['6º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 6º subelemento de despesa selecionado ']
+                [lime['6º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 6º subelemento de despesa selecionado ']
                     [id_resposta]],
-                [lime['7º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 7º subelemento de despesa selecionado ']
+                [lime['7º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 7º subelemento de despesa selecionado ']
                     [id_resposta]],
-                [lime['8º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 8º subelemento de despesa selecionado ']
+                [lime['8º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 8º subelemento de despesa selecionado ']
                     [id_resposta]],
-                [lime['9º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 9º subelemento de despesa selecionado ']
+                [lime['9º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 9º subelemento de despesa selecionado ']
                     [id_resposta]], 
-                [lime['10º Subelemento de Despesa'][id_resposta], lime['Valor solicitado para o 10º subelemento de despesa selecionado ']
+                [lime['10º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 10º subelemento de despesa selecionado ']
                     [id_resposta]],
             ]
             
             df = pd.DataFrame(
                 data, columns=['SubElemento de despesa', 'Valor'])
             
-            df['Valor'] = df['Valor'].astype(float)
+            #df['Valor'] = df['Valor'].astype(float)
             # df = df.drop(columns = ['Valor'])
-            df['Valor'] = df['Valor'].map("{:.2f}".format)
-            df['Valor'] = df['Valor'].map("R$ {}".format)
+            #df['Valor'] = df['Valor'].map("{:.2f}".format)
+            #df['Valor'] = df['Valor'].map("R$ {}".format)
     
             data2 = df.dropna()
             # print(data2)
@@ -199,10 +207,10 @@ def gerar_pdf():
             c.setFont('Times-Bold', 16)
             if len(data2.index) >= 7:
                 t.wrapOn(c, 800, 800)
-                t.drawOn(c, 75, 300)
+                t.drawOn(c, 50, 300)
             else: 
                 t.wrapOn(c, 800, 800)
-                t.drawOn(c, 75, 400)
+                t.drawOn(c, 50, 400)
                 
             c.restoreState()
 
