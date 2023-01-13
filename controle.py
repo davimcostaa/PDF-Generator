@@ -122,11 +122,31 @@ def gerar_pdf():
         terras.drawOn(c, 162, 227)
 
         valores = []
-        for indice, linha in etnias.iterrows():
+        for indice, linha in lime.iterrows():
             if indice == id_resposta:
-                valores.append(linha['Etnias'])
+                valores.append(linha['Etnia 1'])
+                valores.append(linha['Etnia 2'])
+                valores.append(linha['Etnia 3'])
+                valores.append(linha['Etnia 4'])
+                valores.append(linha['Etnia 5'])
+                valores.append(linha['Etnia 6'])
+                valores.append(linha['Etnia 7'])
+                valores.append(linha['Etnia 8'])
+                valores.append(linha['Etnia 9'])
+                valores.append(linha['Etnia 10'])
+                valores.append(linha['Etnia 11'])
+                valores.append(linha['Etnia 12'])
+                valores.append(linha['Etnia 13'])
+                valores.append(linha['Etnia 14'])
+                valores.append(linha['Etnia 15'])
+                valores.append(linha['Etnia 16'])
+                valores.append(linha['Etnia 17'])
+                valores.append(linha['Etnia 18'])
+                valores.append(linha['Etnia 19'])
+                valores.append(linha['Etnia 20'])
         
-        etnias_id = str(valores).strip('[]') 
+        etnias_id = list(filter(None, valores))
+        etnias_id = str(etnias_id).strip('[]')  
         etn = Paragraph(etnias_id, style= btL)
         etn.wrapOn(c, 420, 20)
         etn.drawOn(c, 162, 180)
