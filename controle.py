@@ -1,5 +1,4 @@
 from PyQt5 import uic, QtWidgets
-from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMessageBox
 
 import pandas as pd
@@ -11,15 +10,21 @@ from reportlab.platypus import Table, TableStyle, Paragraph
 from reportlab.lib import colors
 import gspread
 
-CODE = ''
+CODE = '1IMVaXrRNAuUA_MsHHRVbAY5uzuIyB4Z0-1JUbSDcRg0'
+
+credencial = {
+  
+}
 
 gc = gspread.service_account(filename='key.json')
 
 sh = gc.open_by_key(CODE)
 
 ws = sh.worksheet('Formulário de Projetos de Etnod')
+ti = sh.worksheet('Terras')
 
 lime = pd.DataFrame(ws.get_all_records())
+lista_terras = pd.DataFrame(ti.get_all_records())
 
 lime.set_index('ID da resposta', inplace=True)
 
@@ -109,13 +114,38 @@ def gerar_pdf():
             c.drawString(162, 330, 'Fortalecer atividade(s) produtiva(s) pré-existente(s)')
 
 
-        terras = []
-        for indice, linha in terrasIndigenas.iterrows():
+        for indice, linha in lime.iterrows():
             if indice == id_resposta:
-                terras.append(linha['Terras Indígenas'])
+                terras.append(linha['Terra Indígena 1'])
+                terras.append(linha['Terra Indígena 2'])
+                terras.append(linha['Terra Indígena 3'])
+                terras.append(linha['Terra Indígena 4'])
+                terras.append(linha['Terra Indígena 5'])
+                terras.append(linha['Terra Indígena 6'])
+                terras.append(linha['Terra Indígena 7'])
+                terras.append(linha['Terra Indígena 8'])
+                terras.append(linha['Terra Indígena 9'])
+                terras.append(linha['Terra Indígena 10'])
+                terras.append(linha['Terra Indígena 11'])
+                terras.append(linha['Terra Indígena 12'])
+                terras.append(linha['Terra Indígena 13'])
+                terras.append(linha['Terra Indígena 14'])
+                terras.append(linha['Terra Indígena 15'])
+                terras.append(linha['Terra Indígena 16'])
+                terras.append(linha['Terra Indígena 17'])
+                terras.append(linha['Terra Indígena 18'])
+                terras.append(linha['Terra Indígena 19'])
+                terras.append(linha['Terra Indígena 20'])
 
+        terras = list(filter(None, terras))
+        terrasIndigenas = pd.DataFrame(terras, columns=['terrai_cod'])
+        terrasIndigenas = terrasIndigenas.merge(lista_terras, how = 'inner')
 
-        terras_indigenas = str(terras).strip('[]')  
+        terrasIndigenas.drop(['gid', 'terrai_cod', 'etnia_nome', 'municipio_', 'uf_sigla', 'superficie', 'fase_ti', 'modalidade', 'reestudo_t', 
+                            'cr', 'faixa_fron', 'undadm_cod', 'undadm_nom', 'undadm_sig', 'dominio_un'], axis=1, inplace=True)
+
+        terra = terrasIndigenas['terrai_nom'].tolist()                   
+        terras_indigenas = str(terra).strip('[]')    
 
         terras = Paragraph(terras_indigenas, style= btL)
         terras.wrapOn(c, 420, 20)
@@ -172,7 +202,7 @@ def gerar_pdf():
                 paragrafo.wrapOn(c, 530, 400)
                 paragrafo.drawOn(c, 30, 700)
             
-             data = [
+            data = [
                 # ['SUBELEMENTO DE DESPESA', 'VALOR'],
                 [lime['1º Subelemento de Despesa'][id_resposta], lime[' Valor solicitado para o 1º subelemento de despesa selecionado ']
                     [id_resposta]],
