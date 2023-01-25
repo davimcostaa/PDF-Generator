@@ -55,8 +55,10 @@ def gerar_pdf():
         id = generator.lineEdit.text()
         id_resposta = int(id)
 
-        titulo = lime['Nome do Projeto'][id_resposta]
-        c = canvas.Canvas(f'projetos_etno{id}.pdf')
+        pdf_name = f'projeto_etno{id}.pdf'
+        save_name = os.path.join(os.path.expanduser("~"), "Desktop/", pdf_name)
+
+        c = canvas.Canvas(save_name)
 
         # draw = Drawing(500, 200)
         c.saveState()
