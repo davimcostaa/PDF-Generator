@@ -9,6 +9,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle, Paragraph
 from reportlab.lib import colors
 import gspread
+import os
 
 CODE = '1IMVaXrRNAuUA_MsHHRVbAY5uzuIyB4Z0-1JUbSDcRg0'
 
@@ -59,8 +60,8 @@ def gerar_pdf():
         save_name = os.path.join(os.path.expanduser("~"), "Desktop/", pdf_name)
 
         c = canvas.Canvas(save_name)
+        titulo = lime['Nome do Projeto'][id_resposta]
 
-        # draw = Drawing(500, 200)
         c.saveState()
         c.setLineWidth(1.5)
         c.rect(10,690,575,110, stroke=1, fill=0)
@@ -80,7 +81,6 @@ def gerar_pdf():
             paragrafo.wrapOn(c, 530, 400)
             paragrafo.drawOn(c, 30, 700)
 
-        # c.restoreState()
         c.saveState()
         c.setLineWidth(1.5)
         c.rect(10,510,575,150)
