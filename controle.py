@@ -237,6 +237,7 @@ def gerar_pdf():
             #df['Valor'] = df['Valor'].map("R$ {}".format)
     
             data2 = df.dropna()
+            data2 = df.loc[~(df['Valor'] == ' R$  -   ')]
             # print(data2)
 
             lista = data2.values.tolist()
