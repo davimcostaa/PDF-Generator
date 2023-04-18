@@ -13,19 +13,10 @@ import locale
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
-CODE = '1IMVaXrRNAuUA_MsHHRVbAY5uzuIyB4Z0-1JUbSDcRg0'
+CODE = ''
 
 credencial = {
-  "type": "service_account",
-  "project_id": "conexaoppython",
-  "private_key_id": "65343e5ba9b1e70c66ebe3a96ec3f1e564b965ac",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC+tqZ92WrdSi6K\neNKi5Uj6wc39AxrfVT1aj1Iai2l00lQ0rV/tZO8h83fBuzLRVs9xjBFOzIxSNYAD\nyp7tD1PI1j2Z8tdkbJuKpGg8cPJOBNdB4HQnZVVzkNaBoBfcora0guuthPiEszP+\nsQSJ/+9w5In1wGDBQzyLPKsO2ZBW/eNxvZt6KnnzGZK86CXVQaLqdhhzoQOJ9gb2\nqdLn3SAzfsrJTDYx3rvlVGux9Znksbux3pginjDYMuVEBKMd31oWWqw4y1zySmeG\n5HTUUwNvXrr45cHLxohk+8wmvGZr+4dTobxIGg5fdvnKLZy9wwFwmRiKkG3ty03j\nxE6nAmzZAgMBAAECggEABFOqxpVrkyJzGJ1p4vv6ekTyHlTHE+zQR+kTQuqpjXbV\npf3OfLly4vVuAMFVY3I5oeD8hgoGP3m7AisDTMvRme+BZYggyqSbqUs2WbOyzaIW\nu6YC4J9wDz+InFeEXxM6e7EyNWU8Sa9ypStBN/vMZAZtWlvfXhcfTSXm2B8Hwy90\nmV0JIM8LZ+sP1cLkVSRf531evrqUKyDckycJjwpUpgqGzgbSB1mKPVlaDwdSeLCA\n0JjVGZVKfthls4SutrFmdymCoCWnrUT3hpi4+CvcZ7QaD4LaBrskt6aCz7tZaOzx\n1LBLYxl0jAv2iKX9LweW+mbRDRqqrAk1ayt7lRHYoQKBgQD0OjJSO9tzgFHPocbH\nSZt0mQzLwatasGNrzz4+hkATyCUkROS94ksuzfpe5djdJFphl8vmR6AbRqNgkTdV\nUN0ZtghDUFWXHBnMEMJADdm9S6qfAm9qUUJdOmXAsSXEpPD38lzRnTHkOIC/Lr5K\ncShVWFc7qFwzX8UZs2Ll4/NUoQKBgQDH6BWg8woN7DuGyit9ZtU9pKykuSKXymUN\nhIDqC6zQGD8ZBlSQfk8/X8cjONEsv3wWs0gkYvwtQxFvwDrfrKnmO5wzdteN77ub\nmecjrxDb+80dbaSK0KNiRpbphVuNWWRY6EC//KbXvtafDRCyvAoLoX49Ome/Pm+q\n8eCJh8d1OQKBgQC7an17RZveQraFU2wrOn0lON3s7q4EZh+ld+AYMwWxKIH4FzZB\n0QpI3KApetC0w1ToV4iNKqHezJJLZKTFv8wsEti8b0V/NH1HcAThCr/w18QTSdce\nC0WWLV4wRMDq6nhQjZhU8wB6VjHWhJRapAODmss2aLh4ZCHo2xQlvovYgQKBgDDj\nDd8FcJEFE22cJVSOgFmJ2vqRl+cdBOdwXwJdho6BT3T0Olv3t7Oc3Zs8etMBpPv8\nLglP97Gt9CarEPrAQ/Bc5Y8kYgSA+xVLZt4wIuRZSMkIljOoYDxZXPCQv1nq4YJo\nkeUhiT+7mMrerBW5rI85mCCrFtILF83rRuj7PojpAoGBAOpaS21TNnZNh0Sj7pDP\n42lfU7LqVrB5qmzKHQozOSGklqzARp3NeZA7fY6vtre8D2/8626wIE1SgBn/OVEf\nclSPS660gnsnzL3nmYBiZDO8c4+rSidUOpJa/aj3xgN07828ATYi3knQAlETbHRU\ng4tnFAJysgdpiiFK4zhY55Uj\n-----END PRIVATE KEY-----\n",
-  "client_email": "pythonconnection@conexaoppython.iam.gserviceaccount.com",
-  "client_id": "114683660151443930547",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/pythonconnection%40conexaoppython.iam.gserviceaccount.com"
+  
 }
 
 gc = gspread.service_account_from_dict(credencial)
