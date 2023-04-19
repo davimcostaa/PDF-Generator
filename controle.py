@@ -16,7 +16,7 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 CODE = ''
 
 credencial = {
-  
+
 }
 
 gc = gspread.service_account_from_dict(credencial)
@@ -29,22 +29,17 @@ ti = sh.worksheet('Terras Indigenas')
 
 lime = pd.DataFrame(ws.get_all_records())
 lista_terras = pd.DataFrame(ti.get_all_records())
-    
-my_Style=ParagraphStyle('My Para style',
+
+my_Style = ParagraphStyle('My Para style',
 fontName='Times-Bold',
-fontSize = 16,
-leading = 20,
-alignment = 1)
+fontSize=16,
+leading=20,
+alignment=1)
 
 styleSheet = getSampleStyleSheet()
 bt = styleSheet['BodyText']
 
-btL = ParagraphStyle('BodyTextTTLower',parent=bt, textTransform='uppercase')
-
-#lista_cr.rename(columns={"ID": "Coordenação Regional ou Frente de Proteção Etnoambiental"},  inplace=True)
-#lista_cr.to_excel('teste2.xlsx')
-#lime = lime.merge(lista_cr)
-#lime['Coordenação Regional ou Frente de Proteção Etnoambiental'] = lime['CR']
+btL = ParagraphStyle('BodyTextTTLower', parent=bt, textTransform='uppercase')
 
 def escolherCR():
 
@@ -57,30 +52,32 @@ def escolherCR():
             projetos.append(linha['Nome do Projeto'])
 
     generator.comboBox.clear()
-    
+
     if len(projetos) == 0:
         projetos.append('Nenhum projeto enviado.')
-    
+
     generator.comboBox.addItems(projetos)
+
 
 def gerar_pdf():
 
         projeto = generator.comboBox.currentText()
-        
+
         if projeto == 'Nenhum projeto enviado.':
             QMessageBox.about(generator, "Alerta", "CR sem projeto ainda.")
-            
-        else: 
+
+        else:
             final_df = lime[lime['Nome do Projeto'] == projeto]
-            
+
             id_resposta = 0
-            
+
             for indice, linha in final_df.iterrows():
                 id_resposta = linha['ID da resposta']
-        
+
             lime2 = lime.set_index('ID da resposta')
             pdf_name = f'projeto_etno{id_resposta}.pdf'
-            response = QFileDialog.getExistingDirectory(caption='Select a folder')
+            response = QFileDialog.getExistingDirectory(
+                caption='Select a folder')
             print(response)
             save_name = os.path.join(response, pdf_name)
             c = canvas.Canvas(save_name)
@@ -88,47 +85,48 @@ def gerar_pdf():
 
             c.saveState()
             c.setLineWidth(1.5)
-            c.rect(10,690,575,110, stroke=1, fill=0)
+            c.rect(10, 690, 575, 110, stroke=1, fill=0)
             c.restoreState()
             c.setFont('Times-Bold', 16)
-            c.drawCentredString(300,770, lime2['Coordenação Regional ou Frente de Proteção Etnoambiental'][id_resposta])
+            c.drawCentredString(
+                300, 770, lime2['Coordenação Regional ou Frente de Proteção Etnoambiental'][id_resposta])
             c.drawImage('logo.png', 500, 770, 50, 70)
-            # c.saveState()
-            c.setFont('Times-Bold', 15) 
+            c.setFont('Times-Bold', 15)
 
             if len(titulo) < 70:
-                paragrafo = Paragraph(lime2['Nome do Projeto'][id_resposta], style=my_Style)
+                paragrafo = Paragraph(
+                    lime2['Nome do Projeto'][id_resposta], style=my_Style)
                 paragrafo.wrapOn(c, 530, 400)
                 paragrafo.drawOn(c, 30, 730)
-            else:    
-                paragrafo = Paragraph(lime2['Nome do Projeto'][id_resposta], style=my_Style)
+            else:
+                paragrafo = Paragraph(
+                    lime2['Nome do Projeto'][id_resposta], style=my_Style)
                 paragrafo.wrapOn(c, 530, 400)
                 paragrafo.drawOn(c, 30, 700)
 
-            # c.restoreState()
             c.saveState()
             c.setLineWidth(1.5)
-            c.rect(10,510,575,150)
-            c.rect(10,10,575,472)
-            #c.rect(10,130,575,165)
+            c.rect(10, 510, 575, 150)
+            c.rect(10, 10, 575, 472)
             c.restoreState()
-            c.drawString(250,640, "Identificação")
-            c.drawString(250,465, "Descrição Geral")
-            #c.drawString(250,275, "Terras Indígenas")
+            c.drawString(250, 640, "Identificação")
+            c.drawString(250, 465, "Descrição Geral")
             c.setFont('Times-Bold', 14)
-            c.drawString(30,610,'Técnico Responsável:')
-            c.drawString(30,580, 'Lotação:')
-            c.drawString(30,550, 'CTLs Envolvidas:')
+            c.drawString(30, 610, 'Técnico Responsável:')
+            c.drawString(30, 580, 'Lotação:')
+            c.drawString(30, 550, 'CTLs Envolvidas:')
             c.drawString(30, 440, 'Objetivo Geral:')
             c.drawString(30, 335, 'Metodologia')
             c.drawString(30, 180, 'Justificativa')
             c.setFont('Times-Roman', 13)
-            c.drawString(162,612, lime2['Técnico Responsável'][id_resposta])
-            c.drawString(162,582, lime2['Lotação do Técnico Responsável'][id_resposta])
+            c.drawString(162, 612, lime2['Técnico Responsável'][id_resposta])
+            c.drawString(
+                162, 582, lime2['Lotação do Técnico Responsável'][id_resposta])
             c.drawString(162, 552, lime2['CTL 1'][id_resposta])
 
             objetivoTam = lime2['Objetivo Geral'][id_resposta]
-            objetivo = Paragraph(lime2['Objetivo Geral'][id_resposta][:500], style= btL)
+            objetivo = Paragraph(
+                lime2['Objetivo Geral'][id_resposta][:500], style=btL)
 
             if len(objetivoTam) <= 200:
                 objetivo.wrapOn(c, 540, 20)
@@ -138,10 +136,11 @@ def gerar_pdf():
                 objetivo.drawOn(c, 30, 375)
             else:
                 objetivo.wrapOn(c, 540, 20)
-                objetivo.drawOn(c, 30, 365)        
+                objetivo.drawOn(c, 30, 365)
 
             metodologiaTam = lime2['Metodologia'][id_resposta]
-            metodologia = Paragraph(lime2['Metodologia'][id_resposta][:900], style= btL)
+            metodologia = Paragraph(
+                lime2['Metodologia'][id_resposta][:900], style=btL)
 
             if len(metodologiaTam) <= 200:
                 metodologia.wrapOn(c, 540, 20)
@@ -151,17 +150,18 @@ def gerar_pdf():
                 metodologia.drawOn(c, 30, 275)
             elif len(metodologiaTam) <= 500:
                 metodologia.wrapOn(c, 540, 20)
-                metodologia.drawOn(c, 30, 235)     
+                metodologia.drawOn(c, 30, 235)
             elif len(metodologiaTam) <= 700:
                 metodologia.wrapOn(c, 540, 20)
-                metodologia.drawOn(c, 30, 215)         
-            else:    
+                metodologia.drawOn(c, 30, 215)
+            else:
                 metodologia.wrapOn(c, 540, 20)
                 metodologia.drawOn(c, 30, 195)
 
             justificativaTam = lime2['Justificativa'][id_resposta][:900]
-            justificativa = Paragraph(lime2['Justificativa'][id_resposta][:900], style= btL)
-    
+            justificativa = Paragraph(
+                lime2['Justificativa'][id_resposta][:900], style=btL)
+
             if len(justificativaTam) <= 200:
                 justificativa.wrapOn(c, 540, 20)
                 justificativa.drawOn(c, 30, 125)
@@ -173,58 +173,70 @@ def gerar_pdf():
                 justificativa.drawOn(c, 30, 155)
             elif len(justificativaTam) <= 500:
                 justificativa.wrapOn(c, 540, 20)
-                justificativa.drawOn(c, 30, 90)  
+                justificativa.drawOn(c, 30, 90)
             elif len(justificativaTam) <= 700:
                 justificativa.wrapOn(c, 540, 20)
-                justificativa.drawOn(c, 30, 70)                
-            else:    
+                justificativa.drawOn(c, 30, 70)
+            else:
                 justificativa.wrapOn(c, 540, 20)
                 justificativa.drawOn(c, 30, 20)
 
             c.showPage()
 
-            for i in range(1):  
+            for i in range(1):
 
                 c.saveState()
                 c.setLineWidth(1.5)
-                c.rect(10,690,575,110, stroke=1, fill=0)
+                c.rect(10, 690, 575, 110, stroke=1, fill=0)
                 c.restoreState()
                 c.setFont('Times-Bold', 16)
-                c.drawCentredString(300,770, lime2['Coordenação Regional ou Frente de Proteção Etnoambiental'][id_resposta])
-                c.drawImage('logo.png', 500, 770, 50, 70)    
-                
+                c.drawCentredString(
+                    300, 770, lime2['Coordenação Regional ou Frente de Proteção Etnoambiental'][id_resposta])
+                c.drawImage('logo.png', 500, 770, 50, 70)
+
                 if len(titulo) < 70:
-                    paragrafo = Paragraph(lime2['Nome do Projeto'][id_resposta], style=my_Style)
+                    paragrafo = Paragraph(
+                        lime2['Nome do Projeto'][id_resposta], style=my_Style)
                     paragrafo.wrapOn(c, 530, 400)
                     paragrafo.drawOn(c, 30, 730)
-                else:    
-                    paragrafo = Paragraph(lime2['Nome do Projeto'][id_resposta], style=my_Style)
+                else:
+                    paragrafo = Paragraph(
+                        lime2['Nome do Projeto'][id_resposta], style=my_Style)
                     paragrafo.wrapOn(c, 530, 400)
                     paragrafo.drawOn(c, 30, 700)
 
-
                 c.setLineWidth(1.5)
-                c.rect(10,260,575,400)    
+                c.rect(10, 10, 575, 660)
                 c.setFont('Times-Bold', 14)
                 c.drawString(250, 640, "Descrição Geral")
-                c.drawString(30, 612, 'Qtde de Comunidades/Aldeias diretamente atendidas:')
-                c.drawString(30, 582, 'Qtde de Famílias diretamente atendidas:')
+                c.drawString(
+                    30, 612, 'Qtde de Comunidades/Aldeias diretamente atendidas:')
+                c.drawString(
+                    30, 582, 'Qtde de Famílias diretamente atendidas:')
                 c.drawString(30, 552, 'Esse projeto visa: ')
                 c.drawString(30, 512, 'Terras índigenas: ')
                 c.drawString(30, 472, 'Etnias contempladas: ')
                 c.drawString(30, 422, 'Parcerias: ')
-                
+                c.drawString(30, 362, 'Tipo de Atividade Apoiada: ')
+                c.drawString(30, 300, 'Meta Física: ')
+
                 c.setFont('Times-Roman', 13)
-                c.drawString(360, 612, str(lime2['Quantidade de Comunidades/Aldeias diretamente atendidas'][id_resposta]))
-                c.drawString(360, 582, str(lime2['Quantidade de Famílias diretamente atendidas'][id_resposta]))
+                c.drawString(360, 612, str(
+                    lime2['Quantidade de Comunidades/Aldeias diretamente atendidas'][id_resposta]))
+                c.drawString(360, 582, str(
+                    lime2['Quantidade de Famílias diretamente atendidas'][id_resposta]))
+                c.drawString(300, 362, str(
+                    lime2['Escolha o tipo de atividade a ser apoiada:'][id_resposta]))
 
                 if lime2['Este projeto visa .... [Implantar nova(s) atividade(s) produtiva(s)]'][id_resposta] == 'Sim':
-                    c.drawString(162, 552, 'Implantar nova(s) atividade(s) produtiva(s)')
+                    c.drawString(
+                        162, 552, 'Implantar nova(s) atividade(s) produtiva(s)')
                 elif lime2['Este projeto visa .... [Fortalecer atividade(s) produtiva(s) pré-existente(s)]'][id_resposta] == 'Sim':
-                    c.drawString(162, 552, 'Fortalecer atividade(s) produtiva(s) pré-existente(s)')
+                    c.drawString(
+                        162, 552, 'Fortalecer atividade(s) produtiva(s) pré-existente(s)')
                 else:
-                    c.drawString(162, 552, 'Realizar diagnósticos e levantamento de dados')
-
+                    c.drawString(
+                        162, 552, 'Realizar diagnósticos e levantamento de dados')
 
                 terras = []
 
@@ -251,18 +263,10 @@ def gerar_pdf():
                         terras.append(linha['Terra Indígena 19'])
                         terras.append(linha['Terra Indígena 20'])
 
-                
                 terrasLista = list(filter(None, terras))
-                #terrasIndigenas = pd.DataFrame(terras, columns=['terrai_cod'])
-                #terrasIndigenas = terrasIndigenas.merge(lista_terras, how = 'inner')
+                terras_indigenas = str(terrasLista).strip('[]')
 
-                #terrasIndigenas.drop(['gid', 'terrai_cod', 'etnia_nome', 'municipio_', 'uf_sigla', 'superficie', 'fase_ti', 'modalidade', 'reestudo_t', 
-                #                   'cr', 'faixa_fron', 'undadm_cod', 'undadm_nom', 'undadm_sig', 'dominio_un'], axis=1, inplace=True)
-
-                #terra = terrasIndigenas['terrai_nom'].tolist()                   
-                terras_indigenas = str(terrasLista).strip('[]')  
-
-                terras = Paragraph(terras_indigenas, style= btL)
+                terras = Paragraph(terras_indigenas, style=btL)
                 terras.wrapOn(c, 420, 20)
                 terras.drawOn(c, 162, 512)
 
@@ -290,15 +294,15 @@ def gerar_pdf():
                         valores.append(linha['Etnia 18'])
                         valores.append(linha['Etnia 19'])
                         valores.append(linha['Etnia 20'])
-                
+
                 etnias_id = list(filter(None, valores))
-                etnias_id = str(etnias_id).strip('[]')  
-                etn = Paragraph(etnias_id, style= btL)
+                etnias_id = str(etnias_id).strip('[]')
+                etn = Paragraph(etnias_id, style=btL)
                 etn.wrapOn(c, 420, 20)
                 etn.drawOn(c, 164, 472)
-                
+
                 parceiros = []
-                
+
                 if lime2['Com qual ou quais Coordenações-Gerais o projeto é compartilhado? [CGGAM/DPDS]'][id_resposta] == 'Sim':
                         parceiros.append('CGGAM/DPDS')
                 if lime2['Com qual ou quais Coordenações-Gerais o projeto é compartilhado? [CGLIC/DPDS]'][id_resposta] == 'Sim':
@@ -318,13 +322,33 @@ def gerar_pdf():
                 if lime2['Com qual ou quais Coordenações-Gerais o projeto é compartilhado? [CGIIRC/DPT]'][id_resposta] == 'Sim':
                         parceiros.append('CGIIRC/DPT')
 
-                
                 listaParceiros = list(parceiros)
-                listaDeParceiros = str(listaParceiros).strip('[]') 
+                listaDeParceiros = str(listaParceiros).strip('[]')
+
+                parceiros = Paragraph(listaDeParceiros, style=btL)
+                parceiros.wrapOn(c, 420, 20)
+                parceiros.drawOn(c, 162, 422)
+
+                df_meta_fisica = lime2.loc[:, lime2.columns.str.contains(
+                    'meta física', case=False)]
                 
-                terras = Paragraph(listaDeParceiros, style= btL)
-                terras.wrapOn(c, 420, 20)
-                terras.drawOn(c, 162, 422)
+                metaFisica = []
+
+                for indice, linha in df_meta_fisica.iterrows():
+                    if indice == id_resposta:
+                        for coluna in linha.index[1:]:  
+                            if linha[coluna] != '':
+                                nomeColuna = str(coluna)
+                                parte = nomeColuna.split("[")[1].split("]")[0]
+                                novaString = nomeColuna.replace("[{}]" .format(parte), "")
+                                valorColuna = str(linha[coluna])
+                                metaFisica.append(f"{novaString} {valorColuna} {parte}")
+                            
+                metaFisica = str(metaFisica).strip('[]')
+                metaFisica = Paragraph(metaFisica, style=btL)
+                metaFisica.wrapOn(c, 420, 20)
+                metaFisica.drawOn(c, 162, 295)
+                       
                 c.showPage()
                 
             for i in range(1):      
